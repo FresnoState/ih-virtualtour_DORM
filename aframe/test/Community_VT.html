@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+		<script>
+		var current_pos = 0;
+		function add_pos()
+		{
+			current_pos = current_pos + 1;
+			console.log(current_pos);
+			if (current_pos > 5)
+				current_pos = 0;
+		}
+		function sub_pos()
+		{
+			current_pos = current_pos - 1;
+		}
+		//--------------------------------------------------------------------------------------------------------------------------
+		<!------ OVERLAY css code for pop up -->
+		<!-- listener for gaze button & changes video -->
+		AFRAME.registerComponent('next-cursor-listener-1', {
+		  init: function () {
+			var lastIndex = 0;	
+			
+			var SCENES = ['R1.jpg','University_Courtyard/Living_Room.jpg'];
+			
+			this.el.addEventListener('click', function (evt) {
+			  add_pos();
+			  //lastIndex = (lastIndex + 1) % SCENES.length;
+			  document.querySelector("#a").setAttribute('src', SCENES[current_pos]); // changes src of the video (with id 'sky') to next in list
+			  var sceneEl_0 = document.querySelector('a-scene');
+			  switch(current_pos)
+			  {
+				case 0: //[should not exucture]
+					
+					break;
+				case 1: // last scene: get rid of Next Button
+					console.log("case 1");
+					
+					// removes popup box from previous scene
+					var next_remove_hotspot_1 = document.querySelector("#enter");
+					next_remove_hotspot_1.parentNode.removeChild(next_remove_hotspot_1);
+					
+					// popup box
+					var next_hotspot_2 = document.createElement('a-entity');
+					next_hotspot_2.setAttribute('id','s1_pubox_1');
+					next_hotspot_2.setAttribute('material', {color: 'green'});
+					next_hotspot_2.setAttribute('position', {x: -15.0, y: 0.3, z: 26.0});
+					next_hotspot_2.setAttribute('geometry', {primitive: 'sphere'});
+					//next_hotspot_2.setAttribute('cursor-listener-2',"");
+					sceneEl_0.appendChild(next_hotspot_2);
+						
+					
+					// previous sphere
+					var next_btn_1 = document.createElement('a-entity');
+					next_btn_1.setAttribute('id','PREVIOUS');
+					next_btn_1.setAttribute('position', {x: -4.0, y: 0.3, z:-3.0});
+					next_btn_1.setAttribute('previous-cursor-listener-1',"");
+					next_btn_1.setAttribute('material', {color: 'blue', transparent: 'true', opacity: 0.2});
+					next_btn_1.setAttribute('geometry',{primitive: 'sphere'});
+			
+					sceneEl_0.appendChild(next_btn_1);
+			
+					// previous text
+					var next_text_1 = document.createElement('a-text');
+					next_text_1.setAttribute('id','text_prev');
+					next_text_1.setAttribute('text',{font:'kelsonsans', value:'Previous',width: 4});
+					next_text_1.setAttribute('position',{x: -2.0, y: 0.2, z: -1.0});
+					next_text_1.setAttribute('rotation', {x: 0, y: 50, z: 0});
+			
+					sceneEl_0.appendChild(next_text_1);
+					// removes Next button
+					var remove_next_btn = document.querySelector("#NEXT");
+					remove_next_btn.parentNode.removeChild(remove_next_btn);
+					
+					// removes next text
+					var remove_next_text = document.querySelector("#text_next");
+					remove_next_text.parentNode.removeChild(remove_next_text);
+					
+					break;
+			  }
+			  console.log('I was clicked at: ', evt.detail.intersection.point);
+			});
+		  }
+		});
+		
+		//--------------------------------------------------------------------------------------------------------------------------
+		AFRAME.registerComponent('previous-cursor-listener-1', {
+		  init: function () {
+			//var lastIndex = -1;	
+			var SCENES = ['R1.jpg','University_Courtyard/Living_Room.jpg'];
+			this.el.addEventListener('click', function (evt) {
+			  sub_pos();
+			  
+			  document.querySelector("#a").setAttribute('src', SCENES[current_pos]); // changes src of the video (with id 'sky') to next in list
+			  var sceneEl_1 = document.querySelector('a-scene');
+			  switch(current_pos)
+			  {
+				case 0:
+					console.log("prev case 2");
+					
+					// removes button
+					var remove_prev_btn = document.querySelector("#PREVIOUS");
+					remove_prev_btn.parentNode.removeChild(remove_prev_btn);
+					
+					// removes previous text
+					var remove_prev_text = document.querySelector("#text_prev");
+					remove_prev_text.parentNode.removeChild(remove_prev_text);
+					
+					var prev_remove_hotspot_5 = document.querySelector("#s1_pubox_1");
+					prev_remove_hotspot_5.parentNode.removeChild(prev_remove_hotspot_5);
+					
+					// popup box
+					var prev_hotspot_1 = document.createElement('a-entity');
+					prev_hotspot_1.setAttribute('id','enter');
+					prev_hotspot_1.setAttribute('material', {color: 'red'});
+					prev_hotspot_1.setAttribute('position', {x: -15.0, y: 0.3, z: -3.0});
+					prev_hotspot_1.setAttribute('geometry', {primitive: 'sphere'});
+					prev_hotspot_1.setAttribute('cursor-listener-2',"");
+					sceneEl_1.appendChild(prev_hotspot_1);
+					
+					
+					// next sphere
+					var prev_entityEl_11 = document.createElement('a-entity');
+					prev_entityEl_11.setAttribute('id','NEXT');
+					prev_entityEl_11.setAttribute('position', {x: -1, y: 0.5, z: -6});
+					prev_entityEl_11.setAttribute('material', {color: 'red', transparent: 'true', opacity: 0.2});
+					prev_entityEl_11.setAttribute('next-cursor-listener-1',"");
+					prev_entityEl_11.setAttribute('geometry',{primitive: 'sphere'});
+					
+					sceneEl_1.appendChild(prev_entityEl_11);
+					
+					// next text
+					var prev_entityEl_text1 = document.createElement('a-text');
+					prev_entityEl_text1.setAttribute('id','text_next');
+					prev_entityEl_text1.setAttribute('text',{font:'kelsonsans', value:'Next',width: 4});
+					prev_entityEl_text1.setAttribute('position',{x: -0.5, y: 0.2, z: -2});
+					prev_entityEl_text1.setAttribute('rotation', {x: 0, y: 15, z: 0});
+					
+					sceneEl_1. appendChild(prev_entityEl_text1);
+					
+					
+					break;
+
+				case 1: // [should not execute on next button]
+					console.log("prev case 3");
+					
+					break;
+			  }
+			  console.log('I was clicked at: 2', evt.detail.intersection.point);
+			});
+		  }
+		});
+		
+		// remove popup_box
+		AFRAME.registerComponent('cursor_listener_3', {
+			init: function (){
+				this.el.addEventListener('click', function (evt) {
+					var removePUB = document.querySelector('#popup_box');
+					removePUB.parentNode.removeChild(removePUB);
+					
+					var removePUT = document.querySelector('#popup_text');
+					removePUT.parentNode.removeChild(removePUT);
+					
+					var removeBox = document.querySelector('#closeBox');
+					removeBox.parentNode.removeChild(removeBox);
+					console.log("3");
+			});
+		  }
+		});
+		<!-- listener for gaze button & adds things -->
+		AFRAME.registerComponent('cursor-listener-2', {
+		  init: function () {
+			this.el.addEventListener('click', function (evt) {
+			  var sceneEl = document.querySelector('a-scene');
+			  var entityEl_1 = document.createElement('a-image');
+			  entityEl_1.setAttribute('id','popup_box');											// set popup_box
+			  entityEl_1.setAttribute('geometry', {height: 2, width: 3});
+			  entityEl_1.setAttribute('position', {x: -5.0, y: 0.0, z: -0.5});
+			  entityEl_1.setAttribute('rotation', {x: 0, y: 80, z: 0});
+			  entityEl_1.setAttribute('src', 'HelpDesk.png');
+			  sceneEl.appendChild(entityEl_1);
+			  
+			  var entityEl_3 = document.createElement('a-text');
+			  entityEl_3.setAttribute('id','popup_text');											// set popup_text
+			  entityEl_3.setAttribute('position',{x: -5.5, y: -3.0, z: 0.0});
+			  entityEl_3.setAttribute('rotation', {x: -10, y: 80, z: 0});
+			  entityEl_3.setAttribute('text',{value: 'close'});
+			  sceneEl.appendChild(entityEl_3);
+			  
+			  var entityEl_2 = document.createElement('a-entity');
+			  entityEl_2.setAttribute('id','closeBox');
+			  entityEl_2.setAttribute('geometry', {primitive: 'plane', height: 1, width: 1});
+			  entityEl_2.setAttribute('position',{x: -5.7, y: -3.2, z: -0.3});
+			  entityEl_2.setAttribute('rotation', {x: -10, y: 80, z: 0});
+			  entityEl_2.setAttribute('material', {color: 'blue'});
+			  entityEl_2.setAttribute('cursor_listener_3',"");										// set listner for REMOVE popup_box
+			  sceneEl.appendChild(entityEl_2);
+			  
+			  console.log('I was clicked by jjj' );
+			});
+		  }
+		});
+		
+		AFRAME.registerComponent('cursor-listener-4', {
+		  init: function () {
+			this.el.addEventListener('click', function (evt) {
+			  var sceneEl = document.querySelector('a-scene');
+			  var entityEl_1 = document.createElement('a-image');
+			  entityEl_1.setAttribute('id','popup_box');											// set popup_box
+			  entityEl_1.setAttribute('geometry', {height: 1, width: 1});
+			  entityEl_1.setAttribute('position', {x: -15.0, y: 0.3, z: 0.0});
+			  entityEl_1.setAttribute('rotation', {x: 0, y: 140, z: 0});
+			  entityEl_1.setAttribute('src', 'HelpDesk.png');
+			  sceneEl.appendChild(entityEl_1);
+			  
+			  var entityEl_3 = document.createElement('a-text');
+			  entityEl_3.setAttribute('id','popup_text');											// set popup_text
+			  entityEl_3.setAttribute('position',{x: -5.5, y: -3.0, z: 0.0});
+			  entityEl_3.setAttribute('rotation', {x: -10, y: 80, z: 0});
+			  entityEl_3.setAttribute('text',{value: 'close'});
+			  sceneEl.appendChild(entityEl_3);
+			  
+			  var entityEl_2 = document.createElement('a-entity');
+			  entityEl_2.setAttribute('id','closeBox');
+			  entityEl_2.setAttribute('geometry', {primitive: 'plane', height: 1, width: 1});
+			  entityEl_2.setAttribute('position',{x: -5.7, y: -3.2, z: -0.3});
+			  entityEl_2.setAttribute('rotation', {x: -10, y: 80, z: 0});
+			  entityEl_2.setAttribute('material', {color: 'blue'});
+			  entityEl_2.setAttribute('cursor_listener_3',"");										// set listner for REMOVE popup_box
+			  sceneEl.appendChild(entityEl_2);
+			  
+			  console.log('I was clicked by jjj' );
+			});
+		  }
+		});
+		</script>
+	</head>
+
+	<body>
+		<a-scene>
+			<a-assets>
+				<!-- first scene -->
+				<img id="sky" src="R1.jpg">
+			</a-assets>
+			
+			<!-- display video -->
+			<a-sky id="a" src="#sky" rotation="0 -130 0"></a-sky>
+			<!--a-plane src="scary-face.jpg" height="2" width="3" rotation="0 75 0" position="-1.0 0.0 -0.5"></a-plane-->
+			<!-- enables look controls -->
+			<a-entity camera="" look-controls="">
+			
+			  <!-- enables ring for gaze -->
+			  <a-entity cursor="fuse: true; fuseTimeout: 2000"
+						position="0 0 -1"
+						geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+						material="color: black; shader: flat">
+			  </a-entity>
+			</a-entity>
+
+			<!-- object for user to gaze upon to change scene -->
+			<a-entity id="NEXT" position="-1 0.5 -6" material="color: red; transparent: true; opacity: 0.2;" next-cursor-listener-1 geometry="primitive: sphere" ></a-entity>
+			<a-text id="text_next" font="kelsonsans" value="Next" width="4" position="-0.5 0.2 -2"
+              rotation="0 15 0"></a-text>
+			
+		
+			<!-- object for user to gaze upon to change scene -->
+			<a-entity id="enter" position="-15.0 0.3 -3.0"  material="color: red" cursor-listener-2="" geometry="primitive: sphere" ></a-entity>
+		</a-scene>
+	</body>
+</html>
